@@ -17,19 +17,67 @@ Enemy.prototype.update = function(dt) {
     this.x = this.x + (this.speed * dt);
 };
 
-// Draw the enemy on the screen, required method for game
+// Render the enemy to the screen.
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Player class
 var Player = function() {
+    this.x = 200;
+    this.y = 375;
     this.sprite = 'images/char-boy.png';
 };
 
-Player.prototype.update = function() {};
-Player.prototype.render = function() {};
-Player.prototype.handleInput = function() {};
+Player.prototype.update = function() {
+
+
+};
+
+Player.prototype.reset = function() {
+    this.x = 200;
+    this.y = 375;
+}
+
+// Render the player to the screen.
+Player.prototype.render = function() {
+   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+
+Player.prototype.handleInput = function(direction) {
+    var win      = 60,
+        vDist    = 80,
+        hDist    = 100,
+        maxRight = ctx.canvas.width - 100,
+        maxLeft  = 0,
+        maxUp    = 5,
+        maxDown  = ctx.canvas.height - 200;
+
+    switch (direction) {
+        case 'left':
+            if (this.x <= maxLeft) {break;}
+            this.x -= hDist;
+            break;
+        case 'right':
+            if (this.x >= maxRight) {break;}
+            this.x += hDist;
+            break;
+        case 'up':
+            if (this.y <= win) {
+                this.reset();
+            } else if (this.y <= maxUp) {
+                break;
+            } else {
+                this.y -= vDist;
+            }
+            break;
+        case 'down':
+            if (this.y >= maxDown) {break;}
+            this.y += vDist;
+            break;
+    }
+};
 
 // Create the enemies.
 // Second value is y axis. 60, 145, adn 230 work pretty well to place
