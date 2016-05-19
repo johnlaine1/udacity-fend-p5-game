@@ -1,6 +1,15 @@
-frontend-nanodegree-arcade-game
-===============================
+# Front End Nanodegree Arcade Game
 
-Students should use this [rubric](https://www.udacity.com/course/viewer/#!/c-nd001/l-2696458597/m-2687128535) for self-checking their submission.
+This is a simple arcade style game, created as a project to be submitted as part of Udacity's front end developer nanodegree program.
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+The game demonstrates the use of object oriented javascript as well as the HTML canvas element.
+
+## Installation
+1. Clone or download the repo to your computer
+2. Start your webserver and point it to index.html
+
+## How to play
+The object of the game it to make across the screen to the water on the other side.
+Each time you make it across the screen your score will increase, each time you get
+hit by a bug, your score will decrease.
+
