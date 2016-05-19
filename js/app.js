@@ -6,10 +6,13 @@
  * @param {number} speed - The speed of the enemy
  */
 var Enemy = function(x, y, speed) {
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
-    this.sprite = 'images/enemy-bug.png';
+  this.x = x;
+  this.y = y;
+  this.speed = speed;
+  // If you change the sprite here, make sure that it is also in the array
+  // that is passes to the Resources.load function in the engine.js file
+  // line 169.
+  this.sprite = 'images/enemy-bug.png';
 };
 
 /**
@@ -38,26 +41,29 @@ Enemy.prototype.render = function() {
  * @constructor
  */
 var Player = function() {
-  this.defaultX = 215; // Starting x position.
-  this.defaultY = 455; // Starting y position.
+  this.defaultX = 200; // Starting x position.
+  this.defaultY = 400; // Starting y position.
   this.x = this.defaultX;
   this.y = this.defaultY;
-  this.vDistToMove = 80;
+  this.vDistToMove = 85;
   this.hDistToMove = 100;
   this.wins = 0;
   this.losses = 0;
   this.scoreMultiplier = 100;
-  this.sprite = 'images/char-boy.png';
+  // If you change the sprite here, make sure that it is also in the array
+  // that is passes to the Resources.load function in the engine.js file
+  // line 169.
+  this.sprite = 'images/char-pink-girl.png';
 };
 
 /**
  * Updates a player's position
  */
 Player.prototype.update = function() {
-  var rightBorder  = ctx.canvas.width,
+  var rightBorder  = ctx.canvas.width - 25,
       leftBorder   = 0,
-      topBorder     = 100,
-      bottomBorder   = ctx.canvas.height - 100;
+      topBorder     = 50,
+      bottomBorder   = ctx.canvas.height - 200;
 
   // This keeps the player on the board and detects a win
   if (this.x < leftBorder) {this.x += this.hDistToMove;}
@@ -163,11 +169,11 @@ Player.prototype.handleInput = function(direction) {
 /**
  * Instantiate the enemy class
  * The second parameter is the y axis. The following works well to place the
- * enemies rows 1-3 respectively: 135, 220, 300.
+ * enemies rows 1-3 respectively: 60, 145, 230.
  */
-var enemy1 = new Enemy(0, 135, 200),
-    enemy2 = new Enemy(200, 220, 300),
-    enemy3 = new Enemy(400, 300, 400);
+var enemy1 = new Enemy(0, 60, 200),
+    enemy2 = new Enemy(200, 145, 300),
+    enemy3 = new Enemy(400, 230, 400);
 
 var allEnemies = [enemy1, enemy2, enemy3];
 
