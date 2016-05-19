@@ -306,6 +306,4 @@ document.addEventListener('keyup', function(e) {
 
   player.handleInput(allowedKeys[e.keyCode]);
 });
-document.addEventListener('click', function(e) {
-  console.log(e.layerX, e.layerY);
-});
+
