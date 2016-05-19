@@ -29,15 +29,33 @@ var Player = function() {
     this.defaultY = 455; // Starting y position.
     this.x = this.defaultX;
     this.y = this.defaultY;
+    this.vDistToMove = 80;
+    this.hDistToMove = 100;
+    this.wins = 0;
+    this.losses = 0;
     this.sprite = 'images/char-boy.png';
 };
 
 Player.prototype.update = function() {
-    this.detectCollision();
+
+  var rightBorder  = ctx.canvas.width,
+      leftBorder   = 0,
+      topBorder     = 100,
+      bottomBorder   = ctx.canvas.height - 100;
+
+  if (this.x < leftBorder) {this.x += this.hDistToMove;}
+  if (this.x > rightBorder) {this.x -= this.hDistToMove;}
+  if (this.y > bottomBorder) {this.y -= this.vDistToMove;}
+  if (this.y < topBorder) {this.win();}
+
+  this.detectCollision();
 };
 
 Player.prototype.win = function() {
-    console.log("We have a winner");
+
+  this.wins += 1;
+  document.getElementById("wins").textContent = this.wins;
+  this.reset();
 };
 
 Player.prototype.reset = function() {
@@ -76,40 +94,21 @@ Player.prototype.render = function() {
 
 
 Player.prototype.handleInput = function(direction) {
-    var win       = 200, // Distance in pixels from top of canvas that will cause a win.
-        vDistMove = 80, // Number of vertical pixels to move on each stroke.
-        hDistMove = 100, // Number of horizontal pixels to move on each stroke.
 
-        // These values create the boandaries so player does not go off the
-        // canvas.
-        rightBorder  = ctx.canvas.width - 150,
-        leftBorder   = 25,
-        upBorder     = 100,
-        downBorder   = ctx.canvas.height - 200;
-
-    switch (direction) {
-        case 'left':
-            if (this.x <= leftBorder) {break;}
-            this.x -= hDistMove;
-            break;
-        case 'right':
-            if (this.x >= rightBorder) {break;}
-            this.x += hDistMove;
-            break;
-        case 'up':
-            if (this.y <= win) {
-                this.reset();
-            } else if (this.y <= upBorder) {
-                break;
-            } else {
-                this.y -= vDistMove;
-            }
-            break;
-        case 'down':
-            if (this.y >= downBorder) {break;}
-            this.y += vDistMove;
-            break;
-    }
+  switch (direction) {
+      case 'left':
+          this.x -= this.hDistToMove;
+          break;
+      case 'right':
+          this.x += this.hDistToMove;
+          break;
+      case 'up':
+          this.y -= this.vDistToMove;
+          break;
+      case 'down':
+          this.y += this.vDistToMove;
+          break;
+  }
 };
 
 // Create the enemies.
