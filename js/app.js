@@ -36,11 +36,16 @@ Player.prototype.update = function() {
     this.detectCollision();
 };
 
+Player.prototype.win = function() {
+    console.log("We have a winner");
+};
+
 Player.prototype.reset = function() {
     this.x = this.defaultX;
     this.y = this.defaultY;
 };
 
+// Check if an enemy to player collision has occured.
 Player.prototype.detectCollision = function() {
     var self = this;
 
