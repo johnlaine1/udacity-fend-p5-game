@@ -49,7 +49,9 @@ var Player = function() {
   this.hDistToMove = 100;
   this.wins = 0;
   this.losses = 0;
+  this.tokens = 0;
   this.scoreMultiplier = 100;
+  this.bonusMultiplier = 1000;
   // If you change the sprite here, make sure that it is also in the array
   // that is passes to the Resources.load function in the engine.js file
   // line 169.
@@ -80,7 +82,6 @@ Player.prototype.update = function() {
 Player.prototype.win = function() {
   this.wins += 1;
   this.updateScore();
-  document.getElementById("wins").textContent = this.wins;
   this.reset();
 };
 
@@ -90,7 +91,6 @@ Player.prototype.win = function() {
 Player.prototype.lose = function() {
   this.losses += 1;
   this.updateScore();
-  document.getElementById("losses").textContent = this.losses;
   this.reset();
 };
 
@@ -99,6 +99,10 @@ Player.prototype.lose = function() {
  */
 Player.prototype.updateScore = function() {
   var score = (this.wins - this.losses) * (this.scoreMultiplier);
+  score += (this.tokens * this.bonusMultiplier);
+  document.getElementById("wins").textContent = this.wins;
+  document.getElementById("losses").textContent = this.losses;
+  document.getElementById("tokens").textContent = this.tokens;
   document.getElementById("score").textContent = score;
 };
 
@@ -166,14 +170,83 @@ Player.prototype.handleInput = function(direction) {
   }
 };
 
+var token = function() {
+  this.timer = 0;
+  this.interval = 200;
+  this.sprite = null;
+  this.x = 205;
+  this.y = 75;
+};
+token.prototype.xCoordsList = [5, 105, 205, 305, 405];
+token.prototype.yCoordsList = [75, 155, 240];
+token.prototype.spriteList = [
+    'images/Star.png',
+    'images/Key.png',
+    'images/Heart.png'
+  ];
+token.prototype.update = function() {
+  this.timer += 1;
+
+  // Check the timer, if past the interval place a random token
+  // in a random location,
+  if (this.timer > this.interval) {
+    this.sprite = this.spriteList[Math.floor(Math.random() * this.spriteList.length)];
+    this.x = this.xCoordsList[Math.floor(Math.random() * this.xCoordsList.length)];
+    this.y = this.yCoordsList[Math.floor(Math.random() * this.yCoordsList.length)];
+
+    // Reset the timer.
+    this.timer = 0
+  }
+  this.detectCapture();
+};
+token.prototype.detectCapture = function() {
+  var tokenPos = {
+    radius: 20,
+    x: this.x,
+    y: this.y
+  };
+  var playerPos = {
+    radius: 20,
+    x: player.x,
+    y: player.y
+  };
+  var dx = tokenPos.x - playerPos.x;
+  var dy = tokenPos.y - playerPos.y;
+  var distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < tokenPos.radius + playerPos.radius) {
+        this.tokenCapture();
+    }
+};
+token.prototype.render = function() {
+  if (this.sprite !== null) {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  }
+};
+token.prototype.tokenCapture = function() {
+  player.tokens += 1;
+  player.updateScore();
+  this.reset();
+
+};
+token.prototype.reset = function() {
+  this.sprite = null;
+  this.x = 0;
+  this.y = 0;
+};
+
+/**
+ * Instantiate token object.
+ */
+var token = new token();
+
 /**
  * Instantiate the enemy class
  * The second parameter is the y axis. The following works well to place the
  * enemies rows 1-3 respectively: 60, 145, 230.
  */
-var enemy1 = new Enemy(0, 60, 200),
-    enemy2 = new Enemy(200, 145, 300),
-    enemy3 = new Enemy(400, 230, 400);
+var enemy1 = new Enemy(0, 60, 100),
+    enemy2 = new Enemy(200, 145, 100),
+    enemy3 = new Enemy(400, 230, 100);
 
 var allEnemies = [enemy1, enemy2, enemy3];
 
@@ -195,4 +268,7 @@ document.addEventListener('keyup', function(e) {
   };
 
   player.handleInput(allowedKeys[e.keyCode]);
+});
+document.addEventListener('click', function(e) {
+  console.log(e.layerX, e.layerY);
 });
