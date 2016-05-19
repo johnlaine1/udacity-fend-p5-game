@@ -3,8 +3,6 @@ var Enemy = function(x, y, speed) {
     this.x = x;
     this.y = y;
     this.speed = speed;
-    this.width = 50;
-    this.height = 35;
     this.sprite = 'images/enemy-bug.png';
 };
 
@@ -27,22 +25,20 @@ Enemy.prototype.render = function() {
 
 // Player class
 var Player = function() {
-    this.x = 215;
-    this.y = 455;
-    this.width = 74;
-    this.height = 82;
+    this.defaultX = 215; // Starting x position.
+    this.defaultY = 455; // Starting y position.
+    this.x = this.defaultX;
+    this.y = this.defaultY;
     this.sprite = 'images/char-boy.png';
 };
 
 Player.prototype.update = function() {
     this.detectCollision();
-
-
 };
 
 Player.prototype.reset = function() {
-    this.x = 215;
-    this.y = 455;
+    this.x = this.defaultX;
+    this.y = this.defaultY;
 };
 
 Player.prototype.detectCollision = function() {
