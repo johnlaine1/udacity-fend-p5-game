@@ -100,7 +100,6 @@ Player.prototype.render = function() {
    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-
 Player.prototype.handleInput = function(direction) {
 
   switch (direction) {
@@ -122,9 +121,9 @@ Player.prototype.handleInput = function(direction) {
 // Create the enemies.
 // Second value is y axis. 135, 220, adn 300 work pretty well to place
 // enemies is correct rows.
-var enemy1 = new Enemy(0, 135, 50),
-    enemy2 = new Enemy(200, 220, 60),
-    enemy3 = new Enemy(400, 300, 70);
+var enemy1 = new Enemy(0, 135, 200),
+    enemy2 = new Enemy(200, 220, 300),
+    enemy3 = new Enemy(400, 300, 400);
 
 var allEnemies = [enemy1, enemy2, enemy3];
 
