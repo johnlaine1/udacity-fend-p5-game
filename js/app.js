@@ -9,31 +9,31 @@ var Enemy = function(x, y, speed) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    var maxWidth = ctx.canvas.width;
-    // Reset x when enemy goes off screen
-    if (this.x >= maxWidth) {
-        this.x = -150;
-    }
+  var maxWidth = ctx.canvas.width;
+  // Reset x when enemy goes off screen
+  if (this.x >= maxWidth) {
+      this.x = -150;
+  }
 
-    this.x = this.x + (this.speed * dt);
+  this.x = this.x + (this.speed * dt);
 };
 
 // Render the enemy to the screen.
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Player class
 var Player = function() {
-    this.defaultX = 215; // Starting x position.
-    this.defaultY = 455; // Starting y position.
-    this.x = this.defaultX;
-    this.y = this.defaultY;
-    this.vDistToMove = 80;
-    this.hDistToMove = 100;
-    this.wins = 0;
-    this.losses = 0;
-    this.sprite = 'images/char-boy.png';
+  this.defaultX = 215; // Starting x position.
+  this.defaultY = 455; // Starting y position.
+  this.x = this.defaultX;
+  this.y = this.defaultY;
+  this.vDistToMove = 80;
+  this.hDistToMove = 100;
+  this.wins = 0;
+  this.losses = 0;
+  this.sprite = 'images/char-boy.png';
 };
 
 Player.prototype.update = function() {
@@ -58,33 +58,41 @@ Player.prototype.win = function() {
   this.reset();
 };
 
+Player.prototype.lose = function() {
+
+  this.losses += 1;
+  document.getElementById("losses").textContent = this.losses;
+  this.reset();
+};
+
 Player.prototype.reset = function() {
-    this.x = this.defaultX;
-    this.y = this.defaultY;
+
+  this.x = this.defaultX;
+  this.y = this.defaultY;
 };
 
 // Check if an enemy to player collision has occured.
 Player.prototype.detectCollision = function() {
-    var self = this;
+  var self = this;
 
-    allEnemies.forEach(function(enemy) {
-        var enemyPos = {
-            radius: 35,
-            x: enemy.x,
-            y: enemy.y
-        };
-        var playerPos = {
-            radius: 40,
-            x: player.x,
-            y: player.y
-        };
-        var dx = enemyPos.x - playerPos.x;
-        var dy = enemyPos.y - playerPos.y;
-        var distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < enemyPos.radius + playerPos.radius) {
-            self.reset();
-        }
-    });
+  allEnemies.forEach(function(enemy) {
+      var enemyPos = {
+          radius: 35,
+          x: enemy.x,
+          y: enemy.y
+      };
+      var playerPos = {
+          radius: 40,
+          x: player.x,
+          y: player.y
+      };
+      var dx = enemyPos.x - playerPos.x;
+      var dy = enemyPos.y - playerPos.y;
+      var distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < enemyPos.radius + playerPos.radius) {
+          self.lose();
+      }
+  });
 };
 
 // Render the player to the screen.
@@ -96,18 +104,18 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(direction) {
 
   switch (direction) {
-      case 'left':
-          this.x -= this.hDistToMove;
-          break;
-      case 'right':
-          this.x += this.hDistToMove;
-          break;
-      case 'up':
-          this.y -= this.vDistToMove;
-          break;
-      case 'down':
-          this.y += this.vDistToMove;
-          break;
+    case 'left':
+        this.x -= this.hDistToMove;
+        break;
+    case 'right':
+        this.x += this.hDistToMove;
+        break;
+    case 'up':
+        this.y -= this.vDistToMove;
+        break;
+    case 'down':
+        this.y += this.vDistToMove;
+        break;
   }
 };
 
@@ -123,16 +131,15 @@ var allEnemies = [enemy1, enemy2, enemy3];
 // Place the player object in a variable called player
 var player = new Player();
 
-
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
+  var allowedKeys = {
+      37: 'left',
+      38: 'up',
+      39: 'right',
+      40: 'down'
+  };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+  player.handleInput(allowedKeys[e.keyCode]);
 });
