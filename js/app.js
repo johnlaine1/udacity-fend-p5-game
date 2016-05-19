@@ -28,43 +28,45 @@ Enemy.prototype.render = function() {
 // Player class
 var Player = function() {
     this.x = 215;
-    this.y = 440;
+    this.y = 455;
     this.width = 74;
     this.height = 82;
     this.sprite = 'images/char-boy.png';
 };
 
 Player.prototype.update = function() {
-    // Check for collision.
-    allEnemies.forEach(function(enemy) {
-        var enemyPos = {
-          x: enemy.x,
-          y: enemy.y,
-          width: enemy.width,
-          height: enemy.height
-        };
-        var playerPos = {
-          x: player.x,
-          y: player.y,
-          width: player.width,
-          height: player.height
-        };
-    if (enemy.x < player.x + player.width &&
-        enemy.x + enemy.width > player.x &&
-        enemy.y < player.y + player.height &&
-        enemy.height + enemy.y > player.y) {
+    this.detectCollision();
 
-            player.reset();
-        }
-
-    });
 
 };
 
 Player.prototype.reset = function() {
     this.x = 215;
-    this.y = 440;
-}
+    this.y = 455;
+};
+
+Player.prototype.detectCollision = function() {
+    var self = this;
+
+    allEnemies.forEach(function(enemy) {
+        var enemyPos = {
+            radius: 35,
+            x: enemy.x,
+            y: enemy.y
+        };
+        var playerPos = {
+            radius: 40,
+            x: player.x,
+            y: player.y
+        };
+        var dx = enemyPos.x - playerPos.x;
+        var dy = enemyPos.y - playerPos.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < enemyPos.radius + playerPos.radius) {
+            self.reset();
+        }
+    });
+};
 
 // Render the player to the screen.
 Player.prototype.render = function() {
@@ -73,41 +75,44 @@ Player.prototype.render = function() {
 
 
 Player.prototype.handleInput = function(direction) {
-    var win      = 125,
-        vDist    = 80,
-        hDist    = 100,
-        maxRight = ctx.canvas.width - 150,
-        maxLeft  = 50,
-        maxUp    = 5,
-        maxDown  = ctx.canvas.height - 200;
+    var win       = 200, // Distance in pixels from top of canvas that will cause a win.
+        vDistMove = 80, // Number of vertical pixels to move on each stroke.
+        hDistMove = 100, // Number of horizontal pixels to move on each stroke.
+
+        // These values create the boandaries so player does not go off the
+        // canvas.
+        rightBorder  = ctx.canvas.width - 150,
+        leftBorder   = 25,
+        upBorder     = 100,
+        downBorder   = ctx.canvas.height - 200;
 
     switch (direction) {
         case 'left':
-            if (this.x <= maxLeft) {break;}
-            this.x -= hDist;
+            if (this.x <= leftBorder) {break;}
+            this.x -= hDistMove;
             break;
         case 'right':
-            if (this.x >= maxRight) {break;}
-            this.x += hDist;
+            if (this.x >= rightBorder) {break;}
+            this.x += hDistMove;
             break;
         case 'up':
             if (this.y <= win) {
                 this.reset();
-            } else if (this.y <= maxUp) {
+            } else if (this.y <= upBorder) {
                 break;
             } else {
-                this.y -= vDist;
+                this.y -= vDistMove;
             }
             break;
         case 'down':
-            if (this.y >= maxDown) {break;}
-            this.y += vDist;
+            if (this.y >= downBorder) {break;}
+            this.y += vDistMove;
             break;
     }
 };
 
 // Create the enemies.
-// Second value is y axis. 60, 145, adn 230 work pretty well to place
+// Second value is y axis. 135, 220, adn 300 work pretty well to place
 // enemies is correct rows.
 var enemy1 = new Enemy(0, 135, 50),
     enemy2 = new Enemy(200, 220, 60),
