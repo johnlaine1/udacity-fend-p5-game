@@ -1,4 +1,10 @@
-// Enemy class
+/**
+ * Represents an enemy
+ * @constructor
+ * @param {number} x - The starting x axis position
+ * @param {number} y - The starting y axis position
+ * @param {number} speed - The speed of the enemy
+ */
 var Enemy = function(x, y, speed) {
     this.x = x;
     this.y = y;
@@ -6,24 +12,31 @@ var Enemy = function(x, y, speed) {
     this.sprite = 'images/enemy-bug.png';
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+/**
+ * Update the enemy's position
+ * @param {number} dt - a time delta between ticks, helps regulate speed between different systems
+ */
 Enemy.prototype.update = function(dt) {
   var maxWidth = ctx.canvas.width;
+
   // Reset x when enemy goes off screen
   if (this.x >= maxWidth) {
       this.x = -150;
   }
-
   this.x = this.x + (this.speed * dt);
 };
 
-// Render the enemy to the screen.
+/**
+ * Render the enemy to the screen
+ */
 Enemy.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Player class
+/**
+ * Represents a player
+ * @constructor
+ */
 var Player = function() {
   this.defaultX = 215; // Starting x position.
   this.defaultY = 455; // Starting y position.
@@ -33,16 +46,20 @@ var Player = function() {
   this.hDistToMove = 100;
   this.wins = 0;
   this.losses = 0;
+  this.scoreMultiplier = 100;
   this.sprite = 'images/char-boy.png';
 };
 
+/**
+ * Updates a player's position
+ */
 Player.prototype.update = function() {
-
   var rightBorder  = ctx.canvas.width,
       leftBorder   = 0,
       topBorder     = 100,
       bottomBorder   = ctx.canvas.height - 100;
 
+  // This keeps the player on the board and detects a win
   if (this.x < leftBorder) {this.x += this.hDistToMove;}
   if (this.x > rightBorder) {this.x -= this.hDistToMove;}
   if (this.y > bottomBorder) {this.y -= this.vDistToMove;}
@@ -51,27 +68,46 @@ Player.prototype.update = function() {
   this.detectCollision();
 };
 
+/**
+ * Actions to perform when a player wins a game.
+ */
 Player.prototype.win = function() {
-
   this.wins += 1;
+  this.updateScore();
   document.getElementById("wins").textContent = this.wins;
   this.reset();
 };
 
+/**
+ * Actions to perform when a player loses a game.
+ */
 Player.prototype.lose = function() {
-
   this.losses += 1;
+  this.updateScore();
   document.getElementById("losses").textContent = this.losses;
   this.reset();
 };
 
-Player.prototype.reset = function() {
+/**
+ * Update the player's score.
+ */
+Player.prototype.updateScore = function() {
+  var score = (this.wins - this.losses) * (this.scoreMultiplier);
+  document.getElementById("score").textContent = score;
+};
 
+/**
+ * Actions to take in order to reset the game. This is called when a
+ * player wins or loses a game.
+ */
+Player.prototype.reset = function() {
   this.x = this.defaultX;
   this.y = this.defaultY;
 };
 
-// Check if an enemy to player collision has occured.
+/**
+ * Detect if a collision between an enemy and player has occured.
+ */
 Player.prototype.detectCollision = function() {
   var self = this;
 
@@ -95,13 +131,19 @@ Player.prototype.detectCollision = function() {
   });
 };
 
-// Render the player to the screen.
+/**
+ * Render the player to the screen.
+ */
 Player.prototype.render = function() {
-   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+/**
+ * Handle the input from the user.
+ * Allowed inputs keys: Up, Down, Left, Right.
+ * @param {string} direction - The key that was pressed.
+ */
 Player.prototype.handleInput = function(direction) {
-
   switch (direction) {
     case 'left':
         this.x -= this.hDistToMove;
@@ -118,20 +160,26 @@ Player.prototype.handleInput = function(direction) {
   }
 };
 
-// Create the enemies.
-// Second value is y axis. 135, 220, adn 300 work pretty well to place
-// enemies is correct rows.
+/**
+ * Instantiate the enemy class
+ * The second parameter is the y axis. The following works well to place the
+ * enemies rows 1-3 respectively: 135, 220, 300.
+ */
 var enemy1 = new Enemy(0, 135, 200),
     enemy2 = new Enemy(200, 220, 300),
     enemy3 = new Enemy(400, 300, 400);
 
 var allEnemies = [enemy1, enemy2, enemy3];
 
-// Place the player object in a variable called player
+/**
+ * Instantiate the player
+ */
 var player = new Player();
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+/**
+ * This listens for key presses and passes the information on to the
+ * handleInput method on the player object.
+ */
 document.addEventListener('keyup', function(e) {
   var allowedKeys = {
       37: 'left',

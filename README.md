@@ -10,6 +10,6 @@ The game demonstrates the use of object oriented javascript as well as the HTML 
 
 ## How to play
 The object of the game it to make across the screen to the water on the other side.
-Each time you make it across the screen your score will increase, each time you get
-hit by a bug, your score will decrease.
+Each time you make it across the screen your win score will increase, each time you get
+hit by a bug, your losses score will increase.
 
