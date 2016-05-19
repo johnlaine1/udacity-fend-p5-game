@@ -170,6 +170,10 @@ Player.prototype.handleInput = function(direction) {
   }
 };
 
+/**
+ * Represents the token system.
+ * @constructor
+ */
 var token = function() {
   this.timer = 0;
   this.interval = 200;
@@ -177,13 +181,30 @@ var token = function() {
   this.x = 205;
   this.y = 75;
 };
+
+/**
+ * This stores all possible x coordinates where a token can be placed.
+ */
 token.prototype.xCoordsList = [5, 105, 205, 305, 405];
+
+/**
+ * This stores all possible y coordinates where a token can be placed.
+ */
 token.prototype.yCoordsList = [75, 155, 240];
+
+/**
+ * A list of strings of all possible sprite images.
+ */
 token.prototype.spriteList = [
     'images/Star.png',
     'images/Key.png',
     'images/Heart.png'
   ];
+
+/**
+ * Update the tokens position.
+ * Randomly select a location on the board and place a random token
+ */
 token.prototype.update = function() {
   this.timer += 1;
 
@@ -199,6 +220,10 @@ token.prototype.update = function() {
   }
   this.detectCapture();
 };
+
+/**
+ * Detect if the player has succesfully captured a token.
+ */
 token.prototype.detectCapture = function() {
   var tokenPos = {
     radius: 20,
@@ -217,17 +242,29 @@ token.prototype.detectCapture = function() {
         this.tokenCapture();
     }
 };
+
+/**
+ * Render the token to the canvas.
+ */
 token.prototype.render = function() {
   if (this.sprite !== null) {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
 };
+
+/**
+ * Actions to perform when a token is captured.
+ */
 token.prototype.tokenCapture = function() {
   player.tokens += 1;
   player.updateScore();
   this.reset();
 
 };
+
+/**
+ * Actions to perform in order to reset the token system.
+ */
 token.prototype.reset = function() {
   this.sprite = null;
   this.x = 0;
