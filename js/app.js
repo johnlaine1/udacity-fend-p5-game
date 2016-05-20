@@ -129,8 +129,8 @@ Player.prototype.detectCollision = function() {
       };
       var playerPos = {
           radius: 40,
-          x: player.x,
-          y: player.y
+          x: self.x,
+          y: self.y
       };
       var dx = enemyPos.x - playerPos.x;
       var dy = enemyPos.y - playerPos.y;
