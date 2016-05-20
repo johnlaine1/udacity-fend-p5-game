@@ -174,7 +174,7 @@ Player.prototype.handleInput = function(direction) {
  * Represents the token system.
  * @constructor
  */
-var token = function() {
+var Token = function() {
   this.timer = 0;
   this.interval = 200;
   this.sprite = null;
@@ -185,17 +185,17 @@ var token = function() {
 /**
  * This stores all possible x coordinates where a token can be placed.
  */
-token.prototype.xCoordsList = [5, 105, 205, 305, 405];
+Token.prototype.xCoordsList = [5, 105, 205, 305, 405];
 
 /**
  * This stores all possible y coordinates where a token can be placed.
  */
-token.prototype.yCoordsList = [75, 155, 240];
+Token.prototype.yCoordsList = [75, 155, 240];
 
 /**
  * A list of strings of all possible sprite images.
  */
-token.prototype.spriteList = [
+Token.prototype.spriteList = [
     'images/Star.png',
     'images/Key.png',
     'images/Heart.png'
@@ -205,7 +205,7 @@ token.prototype.spriteList = [
  * Update the tokens position.
  * Randomly select a location on the board and place a random token
  */
-token.prototype.update = function() {
+Token.prototype.update = function() {
   this.timer += 1;
 
   // Check the timer, if past the interval place a random token
@@ -224,7 +224,7 @@ token.prototype.update = function() {
 /**
  * Detect if the player has succesfully captured a token.
  */
-token.prototype.detectCapture = function() {
+Token.prototype.detectCapture = function() {
   var tokenPos = {
     radius: 20,
     x: this.x,
@@ -246,7 +246,7 @@ token.prototype.detectCapture = function() {
 /**
  * Render the token to the canvas.
  */
-token.prototype.render = function() {
+Token.prototype.render = function() {
   if (this.sprite !== null) {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
@@ -255,7 +255,7 @@ token.prototype.render = function() {
 /**
  * Actions to perform when a token is captured.
  */
-token.prototype.tokenCapture = function() {
+Token.prototype.tokenCapture = function() {
   player.tokens += 1;
   player.updateScore();
   this.reset();
@@ -265,7 +265,7 @@ token.prototype.tokenCapture = function() {
 /**
  * Actions to perform in order to reset the token system.
  */
-token.prototype.reset = function() {
+Token.prototype.reset = function() {
   this.sprite = null;
   this.x = 0;
   this.y = 0;
@@ -274,7 +274,7 @@ token.prototype.reset = function() {
 /**
  * Instantiate token object.
  */
-var token = new token();
+var token = new Token();
 
 /**
  * Instantiate the enemy class
