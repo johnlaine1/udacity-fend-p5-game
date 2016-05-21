@@ -1,19 +1,47 @@
+
+/**
+ * Constants
+ */
+var TILE_WIDTH  = 83; // The width of a tile on the board.
+    TILE_HEIGHT = 101; // The height of a tile on the board.
+
+/**
+ * Represents a character.
+ * @constructor
+ * @param {number} x - The initial x coordinate of the character.
+ * @param {number} y - The initial y corrdinate of the character.
+ */
+var Character = function(x, y) {
+  this.x = x;
+  this.y = y;
+};
+
+/**
+ * Render the character to the screen
+ */
+Character.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
 /**
  * Represents an enemy
+ * This is a subclass of Character
  * @constructor
  * @param {number} x - The starting x axis position
  * @param {number} y - The starting y axis position
  * @param {number} speed - The speed of the enemy
  */
 var Enemy = function(x, y, speed) {
-  this.x = x;
-  this.y = y;
+  Character.call(this, x, y);
   this.speed = speed;
   // If you change the sprite here, make sure that it is also in the array
   // that is passes to the Resources.load function in the engine.js file
   // line 169.
   this.sprite = 'images/enemy-bug.png';
 };
+
+Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype.constructor = Enemy;
 
 /**
  * Update the enemy's position
@@ -30,23 +58,15 @@ Enemy.prototype.update = function(dt) {
 };
 
 /**
- * Render the enemy to the screen
- */
-Enemy.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/**
  * Represents a player
  * @constructor
  */
 var Player = function() {
+  Character.call(this);
   this.defaultX = 200; // Starting x position.
   this.defaultY = 400; // Starting y position.
   this.x = this.defaultX;
   this.y = this.defaultY;
-  this.vDistToMove = 85;
-  this.hDistToMove = 100;
   this.wins = 0;
   this.losses = 0;
   this.tokens = 0;
@@ -58,19 +78,22 @@ var Player = function() {
   this.sprite = 'images/char-pink-girl.png';
 };
 
+Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
+
 /**
  * Updates a player's position
  */
 Player.prototype.update = function() {
   var rightBorder  = ctx.canvas.width - 25,
-      leftBorder   = 0,
+      leftBorder   = -2,
       topBorder     = 50,
       bottomBorder   = ctx.canvas.height - 200;
 
   // This keeps the player on the board and detects a win
-  if (this.x < leftBorder) {this.x += this.hDistToMove;}
-  if (this.x > rightBorder) {this.x -= this.hDistToMove;}
-  if (this.y > bottomBorder) {this.y -= this.vDistToMove;}
+  if (this.x < leftBorder) {this.x += TILE_HEIGHT;}
+  if (this.x > rightBorder) {this.x -= TILE_HEIGHT;}
+  if (this.y > bottomBorder) {this.y -= TILE_WIDTH;}
   if (this.y < topBorder) {this.win();}
 
   this.detectCollision();
@@ -142,13 +165,6 @@ Player.prototype.detectCollision = function() {
 };
 
 /**
- * Render the player to the screen.
- */
-Player.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/**
  * Handle the input from the user.
  * Allowed inputs keys: Up, Down, Left, Right.
  * @param {string} direction - The key that was pressed.
@@ -156,16 +172,16 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(direction) {
   switch (direction) {
     case 'left':
-        this.x -= this.hDistToMove;
+        this.x -= TILE_HEIGHT;
         break;
     case 'right':
-        this.x += this.hDistToMove;
+        this.x += TILE_HEIGHT;
         break;
     case 'up':
-        this.y -= this.vDistToMove;
+        this.y -= TILE_WIDTH;
         break;
     case 'down':
-        this.y += this.vDistToMove;
+        this.y += TILE_WIDTH;
         break;
   }
 };
@@ -281,11 +297,12 @@ var token = new Token();
  * The second parameter is the y axis. The following works well to place the
  * enemies rows 1-3 respectively: 60, 145, 230.
  */
-var enemy1 = new Enemy(0, 60, 50),
-    enemy2 = new Enemy(200, 145, 30),
-    enemy3 = new Enemy(400, 230, 40);
+var enemy1 = new Enemy(0, 60, 100),
+    enemy2 = new Enemy(200, 145, 200),
+    enemy3 = new Enemy(400, 230, 300),
+    enemy4 = new Enemy(300, 145, 150);
 
-var allEnemies = [enemy1, enemy2, enemy3];
+var allEnemies = [enemy1, enemy2, enemy3, enemy4];
 
 /**
  * Instantiate the player
