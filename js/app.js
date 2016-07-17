@@ -302,7 +302,7 @@ var enemy1 = new Enemy(0, 60, 50),
     enemy3 = new Enemy(400, 230, 25),
     enemy4 = new Enemy(300, 145, 60);
 
-var allEnemies = [enemy1, enemy2, enemy3, enemy4];
+// var allEnemies = [enemy1, enemy2, enemy3, enemy4];
 
 /**
  * Instantiate the player
