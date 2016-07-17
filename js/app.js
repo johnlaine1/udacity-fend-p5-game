@@ -297,10 +297,10 @@ var token = new Token();
  * The second parameter is the y axis. The following works well to place the
  * enemies rows 1-3 respectively: 60, 145, 230.
  */
-var enemy1 = new Enemy(0, 60, 100),
-    enemy2 = new Enemy(200, 145, 200),
-    enemy3 = new Enemy(400, 230, 300),
-    enemy4 = new Enemy(300, 145, 150);
+var enemy1 = new Enemy(0, 60, 50),
+    enemy2 = new Enemy(200, 145, 75),
+    enemy3 = new Enemy(400, 230, 25),
+    enemy4 = new Enemy(300, 145, 60);
 
 var allEnemies = [enemy1, enemy2, enemy3, enemy4];
 
